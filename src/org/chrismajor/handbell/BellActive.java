@@ -15,8 +15,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -46,7 +48,21 @@ public class BellActive extends FragmentActivity implements SensorEventListener 
 	private SoundPool soundPool;
     private boolean soundLoaded = false;
 	private int soundID;
+	
+	private enum Sensitivity{
+		LOW(8.0f),
+		MED(4.0f),
+		HEIGH(2.0f);
+		
+		private final float threshold;
+		
+		Sensitivity( float f ){
+			threshold = f;
+		}
+	};
 
+	private Sensitivity sensitivity = Sensitivity.LOW;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -79,13 +95,35 @@ public class BellActive extends FragmentActivity implements SensorEventListener 
 	    });
 	    soundID = soundPool.load(this, R.raw.sound, 1);
 	}
-
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.activity_bell_active, menu);
+		Log.e("Handbell","onCreateOptionsMenu");
 		return true;
 	}
+	
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle item selection
+        item.setChecked(true);
+	    switch (item.getItemId()) {
+	        case R.id.high:
+	        	sensitivity = Sensitivity.HEIGH;
+	            return true;
+	        case R.id.med:
+	        	sensitivity = Sensitivity.MED;
+	            return true;
+	        case R.id.low:
+	        	sensitivity = Sensitivity.LOW;
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+	}
+	
 
 	@Override
 	protected void onPause() {
@@ -225,7 +263,7 @@ public class BellActive extends FragmentActivity implements SensorEventListener 
 			
 	//		Log.i("Handbell", ""+omegaMagnitude);
 			
-			if ( omegaMagnitude > 2.0 ){
+			if ( omegaMagnitude > sensitivity.threshold ){
 				bellMoving = true;
 			}else{
 				if ( bellMoving ){
@@ -269,10 +307,9 @@ public class BellActive extends FragmentActivity implements SensorEventListener 
 		      float volume = actualVolume / maxVolume;
 
 		    int bellNumber = mViewPager.getCurrentItem(); //( 0 to 11)
-		    float playbackPitch = 0.25f + ((float)(bellNumber)/8.0f);
+		    float playbackPitch = (float)(2 + bellNumber)/8.0f;
 		      
 	        soundPool.play(soundID, volume, volume, 1, 0, playbackPitch);
-	        Log.e("Test", "Played sound");
 	      }
 	}
 }
