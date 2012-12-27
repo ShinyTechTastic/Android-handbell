@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Handbell</string>
+    <string name="title_section1">A</string>
+    <string name="title_section2">B</string>
+    <string name="title_section3">C</string>
+    <string name="title_section4">D</string>
+    <string name="title_section5">E</string>
+    <string name="title_section6">F</string>
+    <string name="title_section7">G</string>
+    <string name="title_section8">A\'</string>
+    <string name="title_section9">B\'</string>
+    <string name="title_section10">C\'</string>
+    <string name="title_section11">D\'</string>
+    <string name="title_section12">E\'</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+
+</resources>
